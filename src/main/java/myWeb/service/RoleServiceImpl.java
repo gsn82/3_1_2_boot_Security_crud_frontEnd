@@ -1,8 +1,7 @@
-package myWeb.Service;
+package myWeb.service;
 
-import myWeb.Dao.RoleDao;
-import myWeb.Model.Role;
-import org.springframework.beans.factory.annotation.Autowired;
+import myWeb.dao.RoleDao;
+import myWeb.model.Role;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

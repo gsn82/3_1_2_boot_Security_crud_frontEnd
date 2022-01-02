@@ -1,8 +1,7 @@
-package myWeb.Service;
+package myWeb.service;
 
 
-import myWeb.Model.User;
-import org.springframework.security.core.userdetails.UserDetailsService;
+import myWeb.model.User;
 
 import java.util.List;
 

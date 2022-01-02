@@ -1,6 +1,6 @@
-package myWeb.Service;
+package myWeb.service;
 
-import myWeb.Model.Role;
+import myWeb.model.Role;
 
 import java.util.List;
 

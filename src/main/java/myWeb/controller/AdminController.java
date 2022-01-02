@@ -1,18 +1,16 @@
-package myWeb.Controller;
+package myWeb.controller;
 
-import myWeb.Model.Role;
-import myWeb.Model.User;
-import myWeb.Service.RoleService;
-import myWeb.Service.UserService;
+import myWeb.model.Role;
+import myWeb.model.User;
+import myWeb.service.RoleService;
+import myWeb.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;

@@ -1,13 +1,9 @@
 package myWeb;
 
-import myWeb.Dao.RoleDao;
-import myWeb.Dao.UserDao;
-import myWeb.Model.Role;
-import myWeb.Model.User;
-import myWeb.Service.RoleService;
-import myWeb.Service.RoleServiceImpl;
-import myWeb.Service.UserService;
-import myWeb.Service.UserServiceImpl;
+import myWeb.model.Role;
+import myWeb.model.User;
+import myWeb.service.RoleService;
+import myWeb.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;

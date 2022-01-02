@@ -1,4 +1,4 @@
-package myWeb.Config;
+package myWeb.config;
 
 import myWeb.Application;
 import org.springframework.boot.builder.SpringApplicationBuilder;

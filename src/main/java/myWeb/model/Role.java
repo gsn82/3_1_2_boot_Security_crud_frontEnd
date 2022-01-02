@@ -1,4 +1,4 @@
-package myWeb.Model;
+package myWeb.model;
 
 import org.springframework.security.core.GrantedAuthority;
 
