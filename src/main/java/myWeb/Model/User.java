@@ -4,7 +4,10 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
 
 import static javax.persistence.CascadeType.*;
 
@@ -12,9 +15,9 @@ import static javax.persistence.CascadeType.*;
 @Table(name="user")
 public class User implements UserDetails {
 
-    @ManyToMany(cascade = {MERGE},fetch = FetchType.EAGER)
+    @ManyToMany(cascade = {MERGE},fetch = FetchType.LAZY)
     @JoinTable(
-            name = "users_And_Roles",
+            name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
@@ -39,9 +42,6 @@ public class User implements UserDetails {
 
     @Column(name = "password")
     private String password;
-
-    @Transient
-    private String[] roleSetTemp;
 
     public User(String name, String lastName, Byte age, String email, String password, Set<Role> roleSet) {
         this.name = name;
@@ -103,14 +103,6 @@ public class User implements UserDetails {
         this.roleSet = roleSet;
     }
 
-    public void setRoleSetTemp(String[] roleSetTemp) {
-        this.roleSetTemp = roleSetTemp;
-    }
-
-    public String[] getRoleSetTemp(){
-        return roleSetTemp;
-    }
-
     public Byte getAge() {
         return age;
     }
@@ -165,18 +157,5 @@ public class User implements UserDetails {
     @Override
     public int hashCode() {
         return Objects.hash(roleSet, id, name, lastName, age, email, password);
-    }
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "roleSet=" + roleSet +
-                ", id=" + id +
-                ", name='" + name + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", age=" + age +
-                ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
-                '}';
     }
 }

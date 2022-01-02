@@ -6,10 +6,8 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="frontEnd-master" />
-        <module name="frontEnd-master - рабочая" />
+        <module name="bootstrap-master" />
         <module name="webApp2" />
-        <module name="boot_Security_crud_frontEnd" />
       </profile>
     </annotationProcessing>
   </component>

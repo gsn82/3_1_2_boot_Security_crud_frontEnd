@@ -5,9 +5,6 @@ import myWeb.Model.User;
 import myWeb.Service.RoleService;
 import myWeb.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,8 +18,7 @@ import java.util.List;
 import java.util.Set;
 
 //Ignore
-@RequestMapping(value = "/admin")
-@RestController
+@Controller
 public class AdminController {
 
     @Autowired
@@ -31,57 +27,63 @@ public class AdminController {
     @Autowired
     private RoleService roleService;
 
-    @GetMapping //Начальная страница админа
+    @GetMapping(value = "/admin")
     public ModelAndView allUsers() {
         User admin = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        List<User> users = userService.getAllUsers();
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("admin/admin");
+        modelAndView.addObject("userlst", users);
         modelAndView.addObject("admin",admin);
         return modelAndView;
     }
 
-    @GetMapping(value = "/api/users") //api отображения пользователей
-    public ResponseEntity<List<User>> apiAllUsers() {
-        List<User> users = userService.getAllUsers();
-        return new ResponseEntity<>(users, HttpStatus.OK);
+    @GetMapping(value = "/admin/newUser")
+    public String newUser(Model model){
+        User admin = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        model.addAttribute("admin", admin);
+        model.addAttribute("user", new User());
+        return "admin/newUser";
     }
 
-    @GetMapping(value = "/api/users/{id}") //api отображения пользователей
-    public ResponseEntity<User> getUser(@PathVariable("id") long id){
-        return new ResponseEntity<>(userService.getUserById(id), HttpStatus.OK);
+    @PostMapping("/admin/newUser")
+    public String create(@ModelAttribute("user") User user,
+                         @RequestParam(required = false) String[] auth){
+        return userManipulation(user, auth);
     }
 
-    @PostMapping(value = "/api/users") //api создания нового пользователя
-    public ResponseEntity<User> create(@RequestBody User user){
-        userManipulation(user);
-        return new ResponseEntity<>(user, HttpStatus.OK);
+    @GetMapping(value = "/admin/findUser")
+    @ResponseBody
+    public User editUser(@RequestParam("id") long id){
+        return userService.getUserById(id);
     }
 
-    @PutMapping("/api/users") //api редактирования
-    public ResponseEntity<User> edit(@RequestBody User user){
-        userManipulation(user);
-        return new ResponseEntity<>(user, HttpStatus.OK);
+    @PostMapping("/admin/editUser")
+    public String edit(@ModelAttribute("user") User user,
+                       @RequestParam(required = false) String[] auth){
+        return userManipulation(user, auth);
     }
 
-    private void userManipulation(User user) { //функция где должны вставляться роли пользователю и где сохраняется пользователь
+    private String userManipulation(User user, String[] auth) {
         Set<Role> roleSet = new HashSet<>();
-        if (user.getRoleSetTemp().length == 2){
+        if (auth.length == 2){
             roleSet.add(roleService.getAuthByName("User"));
             roleSet.add(roleService.getAuthByName("Admin"));
         } else {
-            if (user.getRoleSetTemp()[0].equals("Admin")) roleSet.add(roleService.getAuthByName("Admin"));
+            if (auth[0].equals("Admin")) roleSet.add(roleService.getAuthByName("Admin"));
             else roleSet.add(roleService.getAuthByName("User"));
         }
 
         user.setRoleSet(roleSet);
-        System.out.println(user);
         userService.saveUser(user);
+
+        return "redirect:/admin";
     }
 
-    @DeleteMapping(value = "/api/users/{id}") //api удаления
-    public ResponseEntity deleteUser(@PathVariable("id") Long id){
+    @PostMapping(value = "admin/deleteUser")
+    public String deleteUser(@RequestParam("id") Long id){
         userService.deleteUser(userService.getUserById(id));
-        return new ResponseEntity(HttpStatus.OK);
+        return "redirect:/admin";
     }
 
 }
